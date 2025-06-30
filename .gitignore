@@ -30,3 +30,4 @@ npm-debug.log.*
 
 LegacyCodeModernizerFrontEnd.code-workspace
 .env
+.venv

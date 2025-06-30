@@ -3,6 +3,7 @@ import sys
 import subprocess
 from openai import OpenAI
 from dotenv import load_dotenv
+import tempfile
 
 load_dotenv()
 OpenAI.api_key = os.getenv("OPENAI_API_KEY")
@@ -42,15 +43,21 @@ def write_tmp(path, content):
         f.write(content)
 
 
+from lib2to3.refactor import RefactoringTool, get_fixers_from_package
+
 def run_2to3(src_path, dst_path):
     os.makedirs(os.path.dirname(dst_path), exist_ok=True)
-    # Copy src to dst
+    # 读取源代码
     with open(src_path, "r", encoding="utf-8") as src_file:
         code = src_file.read()
+    # 初始化 lib2to3 的转换器
+    fixer_pkg = "lib2to3.fixes"
+    tool = RefactoringTool(get_fixers_from_package(fixer_pkg))
+    # 转换
+    tree = tool.refactor_string(code, src_path)
+    # 写入结果
     with open(dst_path, "w", encoding="utf-8") as dst_file:
-        dst_file.write(code)
-    # Run 2to3 on dst
-    subprocess.run(["2to3", "-w", "-n", dst_path], check=True)
+        dst_file.write(str(tree))
 
 
 def migrate_file(src_path, dst_path):
@@ -72,6 +79,17 @@ def migrate_dir(src_dir, dst_dir):
             os.path.join(dst_dir, fname),
         )
 
+
+def migrate_code_str(code_str):
+    with tempfile.TemporaryDirectory() as tmpdir:
+        src_path = os.path.join(tmpdir, "src.py")
+        dst_path = os.path.join(tmpdir, "dst.py")
+        with open(src_path, "w", encoding="utf-8") as f:
+            f.write(code_str)
+        run_2to3(src_path, dst_path)
+        code3 = read_code(dst_path)
+        code3_improved = ai_migrate(code3)
+        return code3_improved
 
 def main():
     if len(sys.argv) != 3:

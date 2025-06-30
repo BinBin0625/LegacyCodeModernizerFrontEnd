@@ -1,20 +1,20 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from migration import migrate_file
+from translate import ai_migrate
 
 app = Flask(__name__)
 CORS(app)
 
 @app.route('/migrate', methods=['POST'])
 def migrate():
-    data = request.json
-    src_path = data['src_path']
-    dst_path = data['dst_path']
+    code = request.json.get('code')
+    if not code:
+        return jsonify({'status': 'error', 'message': 'No code given'}), 400
     try:
-        migrate_file(src_path, dst_path)
-        return jsonify({"status": "success"})
+        result = ai_migrate(code)
+        return jsonify({'status': 'success', 'result': result})
     except Exception as e:
-        return jsonify({"status": "error", "message": str(e)}), 500
+        return jsonify({'status': 'error', 'message': str(e)}), 500
 
 if __name__ == "__main__":
     app.run(port=5000)
