@@ -29,3 +29,4 @@ npm-debug.log.*
 *.scss.d.ts
 
 LegacyCodeModernizerFrontEnd.code-workspace
+.env
