@@ -14,6 +14,17 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
+import { spawn, ChildProcess } from 'child_process';
+
+let backendProc: ChildProcess;
+
+function startBackend() {
+  const backendDir = path.resolve(__dirname, '../../backend');
+  backendProc = spawn('python3', ['api.py', ''], {
+    cwd: backendDir, // 或你的根目录
+    stdio: 'inherit',
+  });
+}
 
 class AppUpdater {
   constructor() {
@@ -127,6 +138,7 @@ app.on('window-all-closed', () => {
 app
   .whenReady()
   .then(() => {
+    startBackend();
     createWindow();
     app.on('activate', () => {
       // On macOS it's common to re-create a window in the app when the
@@ -135,3 +147,7 @@ app
     });
   })
   .catch(console.log);
+
+app.on('will-quit', () => {
+  if (backendProc) backendProc.kill('SIGINT');
+});
