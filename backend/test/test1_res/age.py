@@ -1,6 +1,4 @@
-def categorize_by_age(age):
-    if not isinstance(age, (int, float)) or isinstance(age, bool):
-        return f"Invalid age: {age}"
+def categorize_by_age(age: int) -> str:
     if 0 <= age <= 9:
         return "Child"
     elif 10 <= age <= 18:
