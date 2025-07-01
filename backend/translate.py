@@ -23,10 +23,10 @@ def write_tmp(path, content):
 
 def ai_migrate(code):
     prompt = (
-        "You are an agent - please keep going until the user's query is completely resolved, before ending your turn and yielding back to the user. Only terminate your turn when you are sure that the problem is solved."
-        "If you are not sure about file content or codebase structure pertaining to the user's request, use your tools to read files and gather the relevant information: do NOT guess or make up an answer."
-        "Below is Python 3 code that was translated from Python 2 using 2to3. "
-        "Please improve the code to make it more idiomatic and robust in Python 3, but only output the code with nothing else. Remember to remove ``` at the beginning and the end"
+        "You are an agent - please keep going until the user's query is completely resolved, before ending your turn and yielding back to the user. Only terminate your turn when you are sure that the problem is solved.\n\n"
+        "If you are not sure about file content or codebase structure pertaining to the user's request, use your tools to read files and gather the relevant information: do NOT guess or make up an answer.\n\n"
+        "Below is Python 3 code that was translated from Python 2 using 2to3. Label all the variable's type explicitly and add type annotations to all functions and variables. Also, remove any unnecessary comments or whitespace or unused imports.\n\n"
+        "Please improve the code to make it more idiomatic and robust in Python 3, but only output the code with nothing else. Remember to remove ``` at the beginning and the end\n\n"
         "If any comments are added to explain key changes, include them inline.\n\n"
         f"{code}"
     )
@@ -47,23 +47,17 @@ from lib2to3.refactor import RefactoringTool, get_fixers_from_package
 
 def run_2to3(src_path, dst_path):
     os.makedirs(os.path.dirname(dst_path), exist_ok=True)
-    # 读取源代码
     with open(src_path, "r", encoding="utf-8") as src_file:
         code = src_file.read()
-    # 初始化 lib2to3 的转换器
     fixer_pkg = "lib2to3.fixes"
     tool = RefactoringTool(get_fixers_from_package(fixer_pkg))
-    # 转换
     tree = tool.refactor_string(code, src_path)
-    # 写入结果
     with open(dst_path, "w", encoding="utf-8") as dst_file:
         dst_file.write(str(tree))
 
 
 def migrate_file(src_path, dst_path):
-    # Step 1: 2to3 conversion (src_path → dst_path)
     run_2to3(src_path, dst_path)
-    # Step 2: AI improvement
     code3 = read_code(dst_path)
     code3_improved = ai_migrate(code3)
     write_tmp(dst_path, code3_improved)
