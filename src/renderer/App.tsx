@@ -20,10 +20,12 @@ function Hello() {
       const res = await axios.post("http://localhost:5000/migrate", { code: python2Code });
       if (res.data.status === "success") {
         setPython3Code(res.data.result);
-      } else {
+      } 
+      else {
         setPython3Code("// BackendErr: " + (res.data.message || "Unknown Err"));
       }
-    } catch (e: any) {
+    } 
+    catch (e: any) {
       setPython3Code("// NetworkErr: " + e.message);
     }
   };
@@ -40,6 +42,7 @@ function Hello() {
             value={python2Code}
             onChange={setPython2Code}
             placeholder="Paste or upload your Python 2 code here"
+            onClear
           />
           <br/>
           <Button type="submit" onClick={handleModernize}>Modernize</Button>
@@ -54,10 +57,14 @@ function Hello() {
                   value={python3Code}
                   onChange={setPython3Code}
                   placeholder=""
+                  onClear={() => {
+                    setPython2Code("");
+                    setPython3Code("");
+                  }}
                 />
               </Row>
               <br/>
-              <Button type="button" onClick={() => {setPython2Code(""); setPython3Code("");}}>Clear</Button>  
+              
             </Container>
           </Col>
 
