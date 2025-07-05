@@ -9,7 +9,7 @@ import axios from "axios"
 function Hello() {
   const [python2Code, setPython2Code] = useState("");
   const [python3Code, setPython3Code] = useState("");
-  const [codeChanges, setCodeChanges] = useState("Line 82: Change rawInput -> Input()");
+  const [codeChanges, setCodeChanges] = useState("");
   const handleModernize = async () => {
     if (!python2Code) {
       setPython3Code("// Input Python 2 Code");
@@ -20,6 +20,7 @@ function Hello() {
       const res = await axios.post("http://localhost:5000/migrate", { code: python2Code });
       if (res.data.status === "success") {
         setPython3Code(res.data.result);
+        setCodeChanges(res.data.explain);
       } 
       else {
         setPython3Code("// BackendErr: " + (res.data.message || "Unknown Err"));
