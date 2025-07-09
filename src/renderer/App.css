@@ -3,13 +3,13 @@
  *        See https://github.com/webpack-contrib/sass-loader#imports
  */
 body {
+  font-size: 30px;  
   position: relative;
   color: white;
   height: auto;;
   background: white ;
   font-family: sans-serif;
   overflow-y: auto;
-  display: flex;
   justify-content: center;
   align-items: center;
 }

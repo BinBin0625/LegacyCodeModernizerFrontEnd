@@ -36,20 +36,19 @@ function Hello() {
       <h1 style={{textAlign: "center"}}>Python 2 to 3 Modernizer</h1>
       <Container fluid>
         <Row>
-          <Col xs={12} md={6} lg={4} style={{marginBottom: "1rem"}}>
+          <Col xs={4} style={{ marginBottom: "1rem" }}>
           <CodeEditor
             label="Python 2"
             id="python2Input"
             value={python2Code}
             onChange={setPython2Code}
             placeholder="Paste or upload your Python 2 code here"
-            onClear
           />
           <br/>
-          <Button type="submit" onClick={handleModernize}>Modernize</Button>
+
           </Col>
       
-          <Col xs={12} md={6} lg={4} style={{marginBottom: "1rem"}}>
+          <Col xs={4} style={{ marginBottom: "1rem" }}>
             <Container fluid>
               <Row>
                 <CodeEditor
@@ -58,18 +57,25 @@ function Hello() {
                   value={python3Code}
                   onChange={setPython3Code}
                   placeholder=""
-                  onClear={() => {
-                    setPython2Code("");
-                    setPython3Code("");
-                  }}
                 />
               </Row>
               <br/>
               
             </Container>
+            <div className="d-flex justify-content-center gap-2 mt-3">
+          <Button size="lg" onClick={handleModernize}>Modernize</Button>
+          <Button variant="info" size="lg"
+            onClick={() => {
+              setPython2Code("");
+              setPython3Code("");
+            }}
+            >
+            Clear
+          </Button>
+          </div>
           </Col>
 
-          <Col xs={12} md={6} lg={4}>
+          <Col xs={4} style={{ marginBottom: "1rem" }}>
             <Container fluid>
               <Row>
                 <Form>

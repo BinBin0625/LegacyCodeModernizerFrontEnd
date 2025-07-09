@@ -3,14 +3,14 @@ import { Form, Button, Overlay } from "react-bootstrap";
 import "./CodeEditor.css";
 import copyIcon from "./copy-icon.svg";
 import downloadIcon from "./download-icon.svg"
+import { saveAs } from "file-saver";
 export default function CodeEditor({
   label,
   id,
   value,
   onChange,
   rows = 10,
-  placeholder = "",
-  onClear
+  placeholder = ""
 }) {
 
   const gutterRef = useRef(null);
@@ -26,6 +26,11 @@ export default function CodeEditor({
       console.error("Copy failed:", err);
     }
   };
+
+  const handleDownload = () => saveAs(
+  new Blob([value], { type: "text/x-python;charset=utf-8" }),
+  "converted.py"
+  );
 
   function handleUpload(e) {
     const chosenFile = e.target.files?.[0];
@@ -76,7 +81,7 @@ export default function CodeEditor({
           <Button
             type="button"
             className="icon-btn download-btn"
-            onClick={handleCopy}
+            onClick={handleDownload}
             style={{ backgroundImage: `url(${downloadIcon})` }}
           >
           <span className="sr-only">Copy</span>
@@ -114,9 +119,6 @@ export default function CodeEditor({
             onChange={handleUpload}
           />
         </>
-      )}
-      {label === "Python 3" && (
-        <Button type="button" onClick={() => onClear?.()}>Clear</Button>  
       )}
     </Form.Group>
   );
