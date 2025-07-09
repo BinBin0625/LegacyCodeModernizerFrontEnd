@@ -70,3 +70,24 @@
 
 .copy-btn     { right: .5rem;  background-image: url("./copy-icon.svg");     }
 .download-btn { right: 3rem;   background-image: url("./download-icon.svg"); }
+
+.upload-btn {
+  position: absolute;
+  bottom: 5rem;
+  left: 12rem; 
+  width: 5rem;
+  height: 2.25rem;
+  background-color: #f0f0f0;
+  font-size: 0.9rem;
+  padding: 0 0.75rem;
+  border: 1px solid #ccc;
+  z-index: 5;
+  white-space: nowrap;
+  border-radius: 0.25rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.upload-btn:hover,
+.upload-btn:focus-visible {
+  background-color: #e2e2e2;
+}

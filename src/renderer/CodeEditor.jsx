@@ -10,12 +10,14 @@ export default function CodeEditor({
   value,
   onChange,
   rows = 10,
-  placeholder = ""
+  placeholder = "",
+  setFile,
+  file
 }) {
 
   const gutterRef = useRef(null);
   const fileInputRef = useRef(null);
-  const [file, setFile] = useState(null);
+  
 
   
   const handleCopy = async () => {
@@ -98,18 +100,15 @@ export default function CodeEditor({
         </>
         
         )}
-      
-      </div>
-
-      {/* Upload controls for “Python 2” */}
-      {label === "Python 2" && (
+        {/* Upload controls for “Python 2” */}
+      {label === "Python 2" && file === null && value === "" && (
         <>
           <Button
             type="button"
+            className="upload-btn"
             onClick={() => fileInputRef.current?.click()}
-            className="mb-2"
           >
-            Upload File
+            Upload
           </Button>
           <input
             ref={fileInputRef}
@@ -120,6 +119,9 @@ export default function CodeEditor({
           />
         </>
       )}
+      </div>
+
+      
     </Form.Group>
   );
 }

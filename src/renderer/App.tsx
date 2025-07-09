@@ -10,6 +10,7 @@ function Hello() {
   const [python2Code, setPython2Code] = useState("");
   const [python3Code, setPython3Code] = useState("");
   const [codeChanges, setCodeChanges] = useState("");
+  const [python2File, setPython2File] = useState(null);
   const handleModernize = async () => {
     if (!python2Code) {
       setPython3Code("// Input Python 2 Code");
@@ -43,6 +44,8 @@ function Hello() {
             value={python2Code}
             onChange={setPython2Code}
             placeholder="Paste or upload your Python 2 code here"
+            file={python2File}
+            setFile={setPython2File}
           />
           <br/>
 
@@ -57,6 +60,9 @@ function Hello() {
                   value={python3Code}
                   onChange={setPython3Code}
                   placeholder=""
+                  file=""
+                  setFile=""
+                  
                 />
               </Row>
               <br/>
@@ -64,10 +70,11 @@ function Hello() {
             </Container>
             <div className="d-flex justify-content-center gap-2 mt-3">
           <Button size="lg" onClick={handleModernize}>Modernize</Button>
-          <Button variant="info" size="lg"
+          <Button variant="danger" size="lg"
             onClick={() => {
               setPython2Code("");
               setPython3Code("");
+              setPython2File(null);
             }}
             >
             Clear
